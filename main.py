@@ -1,6 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
+from ClassificaNaiveBayes import classifica_naive_bayes
 from TreinaNaiveBayes import treina_naive_bayes
 
 
@@ -52,6 +53,13 @@ if __name__  == '__main__':
         processed_dataset = process_data(dataset)
 
     dataset_treino, dataset_teste = divide_data(processed_dataset)
-    treina_naive_bayes(dataset_treino)
+    p_condicional, p_prior = treina_naive_bayes(dataset_treino)
+    classe_predita = classifica_naive_bayes(p_prior, p_condicional, dataset_teste)
+    # supondo que você já tenha calculado p_prior e p_condicional
+    # e exemplo_novo seja uma linha do DataFrame do Tic Tac Toe
+
+    classe_predita = classifica_naive_bayes(p_prior, p_condicional, dataset_teste)
+
+    print("Classe prevista:", classe_predita)
     print(f"DATASET TREINO:\n{dataset_treino}")
     print(f"DATASET TESTE:\n{dataset_teste}")
