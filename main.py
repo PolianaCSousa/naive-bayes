@@ -1,6 +1,8 @@
 import pandas as pd
 from pathlib import Path
 
+from TreinaNaiveBayes import treina_naive_bayes
+
 
 def read_file(file_name):
     try:
@@ -26,7 +28,7 @@ def process_data(dataset):
     dataset.iloc[:, -1] = dataset.iloc[:, -1].replace(map_class)
 
     # salva em CSV sem índice e sem cabeçalho
-    dataset.to_csv("numeric-tic-tac-toe.csv", index=False, header=False)
+    dataset.to_csv("numeric-tic-tac-toe.csv", index=False, header=True)
 
     return dataset
 
@@ -50,5 +52,6 @@ if __name__  == '__main__':
         processed_dataset = process_data(dataset)
 
     dataset_treino, dataset_teste = divide_data(processed_dataset)
+    treina_naive_bayes(dataset_treino)
     print(f"DATASET TREINO:\n{dataset_treino}")
     print(f"DATASET TESTE:\n{dataset_teste}")

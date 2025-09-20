@@ -11,5 +11,16 @@
 # 11: end for
 # 12: end for
 # 13: return p_prior, p_condicional =0
+import pandas as pd
+from collections import defaultdict
+import math
 
+def treina_naive_bayes(dataset_treino):
+    p_prior = {}
+    p_condicional = {}
+    classe = 9
+    classes = [0, 1]
 
+    # Probabilidade a priori
+    for c in classes:
+        p_prior[c] = len(dataset_treino[dataset_treino[classe] == c]) / len(dataset_treino)
