@@ -45,21 +45,31 @@ def divide_data(dataset):
 
 
 if __name__  == '__main__':
+    # Traz o dataset pra memoria
     dataset = read_file("tic-tac-toe.data")
 
+    # Processa os dados
+    # - Se o arquivo processado ja existir, le ele
     if Path("numeric-tic-tac-toe.csv").exists():
         processed_dataset = read_file("numeric-tic-tac-toe.csv")
     else:
         processed_dataset = process_data(dataset)
 
+    # Divide o dataset em treino e teste
     dataset_treino, dataset_teste = divide_data(processed_dataset)
+
+    # Treina o modelo Naive Bayes
     p_condicional, p_prior = treina_naive_bayes(dataset_treino)
-    classe_predita = classifica_naive_bayes(p_prior, p_condicional, dataset_teste)
-    # supondo que você já tenha calculado p_prior e p_condicional
-    # e exemplo_novo seja uma linha do DataFrame do Tic Tac Toe
 
-    classe_predita = classifica_naive_bayes(p_prior, p_condicional, dataset_teste)
+    # Roda a classificacao pra cada linha do dataset de teste
+    classe_predita = [
+        classifica_naive_bayes(p_prior, p_condicional, dataset_teste.iloc[[i]])
+        for i in range(len(dataset_teste))
+    ]
 
-    print("Classe prevista:", classe_predita)
+    # Printa os resultados
     print(f"DATASET TREINO:\n{dataset_treino}")
     print(f"DATASET TESTE:\n{dataset_teste}")
+    print("Classe prevista para cada exemplo do teste:")
+    for i, classe in enumerate(classe_predita):
+        print(f"Exemplo {i}: Classe prevista = {classe}")
