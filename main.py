@@ -67,9 +67,31 @@ if __name__  == '__main__':
         for i in range(len(dataset_teste))
     ]
 
-    # Printa os resultados
+    # Printa os datasets
     print(f"DATASET TREINO:\n{dataset_treino}")
     print(f"DATASET TESTE:\n{dataset_teste}")
+
+
+    # Printa as classes previstas
     print("Classe prevista para cada exemplo do teste:")
+    # Conta acertos e erros
+    acertos = 0
+    erros = 0
+    # Percorre todas as linhas do dataset de teste
     for i, classe in enumerate(classe_predita):
-        print(f"Exemplo {i}: Classe prevista = {classe}")
+        # Pega o valor real do dataset
+        valor_real = dataset_teste.iloc[i, -1]
+
+        # Printa o resultado
+        # Mostrando se acertou ou errou
+        if classe == valor_real:
+            print(f"Exemplo {i}: Classe prevista = {classe} (Correto)")
+            acertos += 1
+        else:
+            print(f"Exemplo {i}: Classe prevista = {classe} (Incorreto)")
+            erros += 1
+
+    # Printa o resultado final
+    print(f"Total de acertos: {acertos}")
+    print(f"Total de erros: {erros}")
+    print(f"Precisao: {acertos / (acertos + erros) * 100:.2f}%")
