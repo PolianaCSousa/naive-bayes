@@ -8,7 +8,7 @@ from TreinaNaiveBayes import treina_naive_bayes
 def read_file(file_name):
     try:
         dataset = pd.read_csv(file_name, header=None)
-        print(dataset)
+        #print(dataset)
     except FileNotFoundError:
         print("Erro: O arquivo não foi encontrado.")
     except Exception as e:
@@ -37,7 +37,6 @@ def process_data(dataset):
 
 #divide o dataset em dados de treinamento (70%) e teste (30%)
 def divide_data(dataset):
-    # Suponha que df seja seu DataFrame
     df = pd.DataFrame(dataset)
     treino = df.sample(frac=0.7, random_state=42)  # 70% aleatório
     teste = df.drop(treino.index)  # o resto (30%)
@@ -68,8 +67,8 @@ if __name__  == '__main__':
     ]
 
     # Printa os datasets
-    print(f"DATASET TREINO:\n{dataset_treino}")
-    print(f"DATASET TESTE:\n{dataset_teste}")
+    #print(f"DATASET TREINO:\n{dataset_treino}")
+    #print(f"DATASET TESTE:\n{dataset_teste}")
 
 
     # Printa as classes previstas
@@ -77,6 +76,10 @@ if __name__  == '__main__':
     # Conta acertos e erros
     acertos = 0
     erros = 0
+
+    # Inicializa a matriz de confusão
+    VP = FP = VN = FN = 0
+
     # Percorre todas as linhas do dataset de teste
     for i, classe in enumerate(classe_predita):
         # Pega o valor real do dataset
@@ -91,7 +94,40 @@ if __name__  == '__main__':
             print(f"Exemplo {i}: Classe prevista = {classe} (Incorreto)")
             erros += 1
 
+        # Atualiza a matriz de confusão
+        if valor_real == 1 and classe == 1:
+            VP += 1
+        elif valor_real == 0 and classe == 1:
+            FP += 1
+        elif valor_real == 0 and classe == 0:
+            VN += 1
+        elif valor_real == 1 and classe == 0:
+            FN += 1
+
     # Printa o resultado final
     print(f"Total de acertos: {acertos}")
     print(f"Total de erros: {erros}")
     print(f"Precisao: {acertos / (acertos + erros) * 100:.2f}%")
+
+    print('\n\nMATRIZ DE CONFUSÃO')
+    # Monta tabela
+    df = pd.DataFrame(
+        [[f"(VP) = {VP}", f"(FN) = {FN}"],
+         [f"(FP) = {FP}", f"(VN) = {VN}"]],
+        index=["Positive", "Negative"],
+        columns=["Classe Predita: Positiva", "    Classe Predita:Negativa"]
+    )
+    print(df.to_string())
+    print('\n\n')
+
+    # Calcula métricas de desempenho
+    acuracia = (VP + VN) / (VP + VN + FP + FN)
+    sensibilidade = VP / (VP + FN)
+    especificidade = VN / (VN + FP)
+    precisao = VP / (VP + FP)
+
+    print('MÉTRICAS DE DESEMPENHO')
+    print(f"Acurácia: {acuracia * 100:.2f}%")
+    print(f"Sensibilidade: {sensibilidade * 100:.2f}%")
+    print(f"Especificidade: {especificidade * 100:.2f}%")
+    print(f"Precisão: {precisao*100:.2f}%")

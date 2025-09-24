@@ -40,9 +40,10 @@ def treina_naive_bayes(dataset_treino):
                 # Dividindo pela quantidade de vezes que a classe ocorreu
                 p_condicional[a][v][c] = len(dataset_treino[(dataset_treino[a] == v) & (dataset_treino[classe] == c)]) / len(dataset_treino[dataset_treino[classe] == c])
 
-    print("Probabilidades a priori (P(c)):\n")
+    '''print("Probabilidades a priori (P(c)):\n")
     for c, p in p_prior.items():
         print(f"Classe {c}: {p:.4f} ({p * 100:.2f}%)")
+    '''
 
     return p_condicional, p_prior
 
